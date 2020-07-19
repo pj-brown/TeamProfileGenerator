@@ -13,75 +13,120 @@ const render = require('./lib/htmlRenderer');
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-inquirer.prompt([{
+function createManager() {
+inquirer.prompt([
+  {
     type: 'input',
     name: 'name',
-    message: 'What is your employee\'s name?',
-}, {
+    message: 'What is your manager\'s name?',
+  }, 
+  {
     type: 'input',
     name: 'id',
-    message: 'What is your employee\'s ID number?',
-}, {
+    message: 'What is your manager\'s ID number?',
+  }, 
+  {
     type: 'input',
     name: 'email',
-    message: 'What is your employee\'s email address?',
-}, {
+    message: 'What is your manager\'s email address?',
+  },
+  {
+    type: 'input',
+    name: 'officeNumber',
+    message: 'What is your manager\'s office number?',
+  }
+])
+.then(response => {
+    let manager = new Manager(response.name, response.id, response.email, response.github);
+    console.log(manager);
+    addEmployee();
+    }   
+)}
+
+function addEmployee() {
+inquirer.prompt([
+  {
     type: 'list',
     name: 'role',
-    message: 'What is your employee\'s role in the company?',
-    choices: ['Manager', 'Engineer', 'Intern'],
-}
+    message: 'What type of team member do you want to add?',
+    choices: ['Engineer', 'Intern', 'Done adding employees']
+  }
 ])
-.then((response) => {
-    if (response.role === 'Manager') {
-            inquirer.prompt([{
-                type: 'input',
-                name: 'officeNumber',
-                message: 'What is your employee\'s office number?',
-            }
-        ])
-        .then((managerRole) => {
-            // console.log(response, managerRole);
-            let newManager = {
-                ...response,
-                ...managerRole
-            }
-            console.log(newManager)
-        }) 
-    } 
-    else if (response.role === 'Engineer') {
-        inquirer.prompt([{
-            type: 'input',
-            name: 'github',
-            message: 'What is your employee\'s GitHub username?',
-        }
-    ])
-    .then((engineerRole) => {
-        // console.log(response, engineerRole);
-            let newEngineer = {
-                ...response,
-                ...engineerRole
-            }
-            console.log(newEngineer)
-        }) 
+.then(response => {
+    switch (response.role) {
+        case "Engineer":
+            addEngineer();
+            break;
+         case "Intern":
+             addIntern();
+        default:
+            break;
+     }
+   })
+}
+
+function addEngineer() {
+    inquirer.prompt([
+    {
+        type: 'input',
+        name: 'name',
+        message: 'What is your engineer\'s name?'
+    }, 
+    {
+        type: 'input',
+        name: 'id',
+        message: 'What is your engineer\'s ID number?'
+    }, 
+    {
+        type: 'input',
+        name: 'email',
+        message: 'What is your engineer\'s email address?'
+    }, 
+    {
+        type: 'input',
+        name: 'github',
+        message: 'What is your engineer\'s GitHub username?'
     }
-    else if (response.role === 'Intern') {
-        inquirer.prompt([{
-            type: 'input',
-            name: 'school',
-            message: 'What school your employee attend?',
-        }
     ])
-    .then((internRole) => {
-        // console.log(response, internRole);
-            let newIntern = {
-                ...response,
-                ...internRole
-            }
-            console.log(newIntern)
-        }) 
+    .then(response => {
+        let engineer = new Engineer(response.name, response.id, response.email, response.github);
+        console.log(engineer);
     }
-})
+)}
+
+
+function addIntern() {
+    inquirer.prompt([
+    {
+        type: 'input',
+        name: 'name',
+        message: 'What is your intern\'s name?'
+    }, 
+    {
+        type: 'input',
+        name: 'id',
+        message: 'What is your intern\'s ID number?'
+    }, 
+    {
+        type: 'input',
+        name: 'email',
+        message: 'What is your intern\'s email address?'
+    }, 
+    {
+        type: 'input',
+        name: 'school',
+        message: 'What is the name of your intern\'s school?'
+    }
+    ])
+    .then(response => {
+        let intern = new Intern(response.name, response.id, response.email, response.school);
+        console.log(intern);
+    }
+)}
+
+
+
+
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
@@ -102,3 +147,5 @@ inquirer.prompt([{
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+
+createManager()
