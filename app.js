@@ -37,8 +37,9 @@ inquirer.prompt([
   }
 ])
 .then(response => {
-    let manager = new Manager(response.name, response.id, response.email, response.github);
+    let manager = new Manager(response.name, response.id, response.email, response.officeNumber);
     console.log(manager);
+    employees.push(manager);
     addEmployee();
     }   
 )}
@@ -91,6 +92,8 @@ function addEngineer() {
     .then(response => {
         let engineer = new Engineer(response.name, response.id, response.email, response.github);
         console.log(engineer);
+        employees.push(engineer);
+        addEmployee();
     }
 )}
 
@@ -121,6 +124,8 @@ function addIntern() {
     .then(response => {
         let intern = new Intern(response.name, response.id, response.email, response.school);
         console.log(intern);
+        employees.push(intern);
+        addEmployee();
     }
 )}
 
